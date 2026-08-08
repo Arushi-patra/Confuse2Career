@@ -1,0 +1,10 @@
+FastAPI
+SQLAlchemy
+Pydantic
+JWT
+bcrypt
+scikit-learn
+NumPy
+ReportLab
+PyPDF
+pytest

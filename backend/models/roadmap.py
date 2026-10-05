@@ -1,23 +1,7 @@
-from sqlalchemy import Boolean, Column, Date, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import (Boolean, Column, Date, DateTime, Float, ForeignKey, Integer, String, Text)
 from sqlalchemy.orm import relationship
 
 from core.database import Base
-
-from sqlalchemy import (
-    Boolean,
-    Column,
-    Date,
-    DateTime,
-    Float,
-    ForeignKey,
-    Integer,
-    String,
-    Text
-)
-from sqlalchemy.orm import relationship
-
-from core.database import Base
-
 
 class Roadmap(Base):
     __tablename__ = "roadmaps"

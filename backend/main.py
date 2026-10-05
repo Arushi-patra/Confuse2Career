@@ -10,7 +10,7 @@ from models.resource import Resource
 
 from core.database import Base, engine
 # from routers import auth, profile, dashboard, roadmap, resume
-from routers import auth, onboarding, recommendations, resume, roadmap, skills
+from routers import (auth, recommendations, resume, roadmap, skills, progress)
 from routers.auth import router as auth_router
 
 # Create all tables (only for dev — use Alembic migrations for production changes)
@@ -37,6 +37,11 @@ app.include_router(auth.router, prefix="/auth", tags=["auth"])
 # app.include_router(dashboard.router, prefix="", tags=["dashboard"])
 # app.include_router(roadmap.router, prefix="/roadmap", tags=["roadmap"])
 # app.include_router(resume.router, prefix="/resume", tags=["resume"])
+app.include_router(roadmap.router, prefix="/roadmap", tags=["Roadmap"])
+app.include_router(resume.router, prefix="/resume", tags=["Resume"])
+app.include_router(recommendations.router, prefix="/recommendations", tags=["Recommendations"])
+app.include_router(skills.router, prefix="/skills", tags=["Skills"])
+app.include_router(progress.router, prefix="/progress", tags=["Progress"])
 
 
 @app.get("/")

@@ -1,6 +1,28 @@
+# Secrets
 .env
-venv/
+.env.*
+!.env.example
+
+# Python
 __pycache__/
-*.pyc
-backend/generated/resumes/*.pdf
-backend/uploads/resumes/*.pdf
+*.py[cod]
+.venv/
+venv/
+
+# Frontend
+node_modules/
+dist/
+
+# Generated and uploaded files
+generated/
+uploads/
+*.log
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment-specific frontend config
+frontend/.env.local
+frontend/.env.*.local

@@ -10,6 +10,7 @@ from core.security import (
     create_access_token,
     create_refresh_token,
 )
+from core.deps import get_current_user
 from models.user import User
 from schemas.auth import RegisterRequest
 
@@ -23,7 +24,7 @@ def register(
 ):
     existing = (
         db.query(User)
-        .filter(User.email == payload.email)
+        .filter(User.email == payload.email.lower().strip())
         .first()
     )
 
@@ -34,7 +35,7 @@ def register(
         )
 
     user = User(
-        email=payload.email,
+        email=payload.email.lower().strip(),
         hashed_password=hash_password(payload.password),
         name=payload.name,
         role="student"
@@ -100,6 +101,16 @@ def login(
         "token_type": "bearer"
     }
 
+@router.get("/me")
+def get_me(
+    current_user: User = Depends(get_current_user)
+):
+    return {
+        "id": current_user.id,
+        "name": current_user.name,
+        "email": current_user.email,
+        "role": current_user.role
+    }
 
 
 # from fastapi import APIRouter, Depends, HTTPException

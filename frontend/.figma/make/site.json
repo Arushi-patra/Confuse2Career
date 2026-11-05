@@ -1,0 +1,10 @@
+{
+  "description": "AI-driven career guidance platform that helps students create personalized preparation plans, optimize resumes, and track skill development for successful placements.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

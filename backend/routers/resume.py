@@ -25,7 +25,10 @@ from services.resume import (
 )
 
 from utils.ats import analyze_resume
-from schemas.resume import ResumeUpdateRequest
+from schemas.resume import (
+    ResumeUpdateRequest,
+    ResumeResponse,
+)
 from utils.pdf import generate_resume_pdf
 
 
@@ -95,10 +98,20 @@ async def analyze_uploaded_resume(
     # Adjust these fields to match
     # Developer 1's Resume model.
 
+    # resume = Resume(
+    #     user_id=current_user.id,
+    #     resume_content=resume_text,
+    #     ats_score=int(result["ats_score"]),
+    # )
+
     resume = Resume(
         user_id=current_user.id,
         resume_content=resume_text,
-        ats_score=int(result["ats_score"]),
+        target_role=target_role,
+        ats_score=round(float(result["ats_score"])),
+        matched_keywords=result.get("matched_keywords", []),
+        missing_keywords=result.get("missing_keywords", []),
+        suggestions=result.get("suggestions", []),
     )
 
     db.add(resume)
@@ -142,29 +155,54 @@ def generate_resume(
         "file": path
     }
 
-@router.get("/latest")
+# @router.get("/latest")
+# def get_latest_resume(
+
+#     current_user: User = Depends(
+#         get_current_user
+#     ),
+
+#     db: Session = Depends(get_db)
+# ):
+
+#     resume = (
+#         db.query(Resume)
+#         .filter(
+#             Resume.user_id == current_user.id
+#         )
+#         .order_by(
+#             Resume.id.desc()
+#         )
+#         .first()
+#     )
+
+#     if not resume:
+
+#         raise HTTPException(
+#             status_code=404,
+#             detail="No resume found"
+#         )
+
+#     return {
+#         "id": resume.id,
+#         "ats_score": resume.ats_score,
+#         "resume_content": resume.resume_content
+#     }
+
+
+@router.get("/latest", response_model=ResumeResponse)
 def get_latest_resume(
-
-    current_user: User = Depends(
-        get_current_user
-    ),
-
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
     resume = (
         db.query(Resume)
-        .filter(
-            Resume.user_id == current_user.id
-        )
-        .order_by(
-            Resume.id.desc()
-        )
+        .filter(Resume.user_id == current_user.id)
+        .order_by(Resume.id.desc())
         .first()
     )
 
     if not resume:
-
         raise HTTPException(
             status_code=404,
             detail="No resume found"
@@ -173,8 +211,14 @@ def get_latest_resume(
     return {
         "id": resume.id,
         "ats_score": resume.ats_score,
-        "resume_content": resume.resume_content
+        "target_role": resume.target_role,
+        "resume_content": resume.resume_content,
+        "matched_keywords": resume.matched_keywords or [],
+        "missing_keywords": resume.missing_keywords or [],
+        "suggestions": resume.suggestions or [],
     }
+
+
 
 @router.get("/download")
 def download_resume(
@@ -182,19 +226,40 @@ def download_resume(
 ):
     filename = f"user_{current_user.id}_resume.pdf"
 
-    path = Path("generated/resumes") / filename
+    path = Path("uploads/resumes") / filename
 
     if not path.exists():
         raise HTTPException(
             status_code=404,
-            detail="Generated resume not found"
+            detail="Uploaded resume PDF not found"
         )
 
     return FileResponse(
         path=str(path),
         media_type="application/pdf",
-        filename="resume.pdf"
+        filename="my_resume.pdf"
     )
+
+
+# @router.get("/download")
+# def download_resume(
+#     current_user: User = Depends(get_current_user)
+# ):
+#     filename = f"user_{current_user.id}_resume.pdf"
+
+#     path = Path("generated/resumes") / filename
+
+#     if not path.exists():
+#         raise HTTPException(
+#             status_code=404,
+#             detail="Generated resume not found"
+#         )
+
+#     return FileResponse(
+#         path=str(path),
+#         media_type="application/pdf",
+#         filename="resume.pdf"
+#     )
 # @router.get("/download")
 # def download_resume(
 

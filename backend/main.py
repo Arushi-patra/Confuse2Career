@@ -3,14 +3,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from models.user import User
 from models.user_profile import UserProfile 
-from models.skill import Skill
+from models.skill import SkillAnalysis
 from models.resume import Resume
 from models.roadmap import Roadmap
 from models.resource import Resource
 
 from core.database import Base, engine
 # from routers import auth, profile, dashboard, roadmap, resume
-from routers import (auth, recommendations, resume, roadmap, skills, progress)
+from routers import (auth, recommendations, resume, roadmap, skills, progress, profile)
 from routers.auth import router as auth_router
 
 # Create all tables (only for dev — use Alembic migrations for production changes)
@@ -33,10 +33,8 @@ app.add_middleware(
 
 # Register routers
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
-# app.include_router(profile.router, prefix="", tags=["profile"])
+app.include_router(profile.router, tags=["Profile"])
 # app.include_router(dashboard.router, prefix="", tags=["dashboard"])
-# app.include_router(roadmap.router, prefix="/roadmap", tags=["roadmap"])
-# app.include_router(resume.router, prefix="/resume", tags=["resume"])
 app.include_router(roadmap.router, prefix="/roadmap", tags=["Roadmap"])
 app.include_router(resume.router, prefix="/resume", tags=["Resume"])
 app.include_router(recommendations.router, prefix="/recommendations", tags=["Recommendations"])

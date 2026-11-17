@@ -1,5 +1,6 @@
+from typing import Dict
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class SkillAnalysisRequest(BaseModel):
@@ -18,6 +19,34 @@ class SkillAnalysisResponse(BaseModel):
     interview: float
     career_readiness_score: float
     level: str
+
+
+class SkillGapAnalysisRequest(BaseModel):
+    skills: Dict[str, float] = Field(default_factory=dict)
+
+    @field_validator("skills")
+    @classmethod
+    def validate_skills(cls, value):
+        allowed_skills = {
+            "DBMS",
+            "Operating_System",
+            "Computer_Networks",
+            "OOP",
+            "SQL"
+        }
+
+        invalid_skills = set(value.keys()) - allowed_skills
+
+        if invalid_skills:
+            raise ValueError(
+                f"Invalid skill names: {sorted(invalid_skills)}"
+            )
+
+        if any(score < 0 or score > 100 for score in value.values()):
+            raise ValueError("Skill scores must be between 0 and 100")
+
+        return value
+
 
 
 

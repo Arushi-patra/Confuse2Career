@@ -1,0 +1,100 @@
+sheet,column_name,data_type,missing_count,missing_percentage,unique_count,example_values,role_in_model
+Master_Students,Student_ID,object,0,0.0,1500,S0001 | S0002 | S0003,inspect
+Master_Students,Name,object,0,0.0,500,Onkar Bhalla | Aadhya Bahl | Mekhala Thaker,inspect
+Master_Students,Email,object,0,0.0,499,oscar77@example.com | gsinha@example.net | osetty@example.org,inspect
+Master_Students,College,object,0,0.0,5,IIT Bhubaneswar | NIT Rourkela | VSSUT,inspect
+Master_Students,Branch,object,0,0.0,5,ECE | CSE | Mechanical,inspect
+Master_Students,Year,int64,0,0.0,2,3 | 4 | 4,inspect
+Master_Students,Placement_Date,object,0,0.0,169,2027-12-18 | 2027-10-15 | 2027-12-26,inspect
+Master_Students,Study_Hours,int64,0,0.0,9,2 | 10 | 6,inspect
+Master_Students,Dream_Company,object,0,0.0,10,Oracle | Accenture | Accenture,inspect
+Master_Students,Target_Role,object,0,0.0,7,ML Engineer | Full Stack Developer | Software Engineer,inspect
+Master_Students,Easy_Solved,int64,0,0.0,284,10 | 359 | 210,inspect
+Master_Students,Medium_Solved,int64,0,0.0,228,19 | 171 | 136,inspect
+Master_Students,Hard_Solved,int64,0,0.0,99,2 | 60 | 33,inspect
+Master_Students,Contest_Rating,int64,0,0.0,405,1351 | 2088 | 1689,inspect
+Master_Students,Platform_x,object,0,0.0,1,LeetCode | LeetCode | LeetCode,inspect
+Master_Students,DBMS,int64,0,0.0,65,50 | 96 | 81,inspect
+Master_Students,Operating_System,int64,0,0.0,66,53 | 100 | 90,inspect
+Master_Students,Computer_Networks,int64,0,0.0,65,40 | 91 | 83,inspect
+Master_Students,OOP,int64,0,0.0,66,43 | 85 | 71,inspect
+Master_Students,SQL,int64,0,0.0,66,54 | 96 | 88,inspect
+Master_Students,Project_ID,object,0,0.0,500,P1117 | P1369 | P0423,inspect
+Master_Students,Project_Name,object,0,0.0,15,Student Management System | Weather App | Online Quiz System,inspect
+Master_Students,Technology,object,0,0.0,10,MongoDB | React | MongoDB,inspect
+Master_Students,Difficulty,object,0,0.0,3,Hard | Hard | Medium,inspect
+Master_Students,GitHub_Link,object,0,0.0,500,https://github.com/ST1117/project | https://github.com/ST1369/project | https://github.com/ST0423/project,inspect
+Master_Students,Certification_ID,object,0,0.0,500,C1117 | C1369 | C0423,inspect
+Master_Students,Certification_Name,object,0,0.0,15,Artificial Intelligence Basics | Google Data Analytics | Machine Learning,inspect
+Master_Students,Platform_y,object,0,0.0,5,GeeksforGeeks | Udemy | Coursera,inspect
+Master_Students,Status_x,object,0,0.0,2,In Progress | Completed | Completed,inspect
+Master_Students,Internship_ID,object,0,0.0,500,I1117 | I1369 | I0423,inspect
+Master_Students,Company,object,0,0.0,10,Cognizant | Oracle | Oracle,inspect
+Master_Students,Role,object,0,0.0,8,ML Intern | Frontend Intern | ML Intern,inspect
+Master_Students,Duration,object,0,0.0,4,6 Months | 2 Months | 1 Month,inspect
+Master_Students,Status_y,object,0,0.0,3,Not Started | Ongoing | Completed,inspect
+Master_Students,Resume_ID,object,0,0.0,500,R1117 | R1369 | R0423,inspect
+Master_Students,ATS_Score,int64,0,0.0,71,45 | 86 | 83,inspect
+Master_Students,Grammar_Score,int64,0,0.0,61,53 | 95 | 84,inspect
+Master_Students,Keywords_Matched,int64,0,0.0,21,9 | 23 | 17,inspect
+Master_Students,Resume_Format,object,0,0.0,3,Basic | Basic | Modern,inspect
+Master_Students,Overall_Status,object,0,0.0,4,Needs Improvement | Excellent | Excellent,inspect
+Courses,Course_ID,object,0,0.0,500,C0001 | C0002 | C0003,inspect
+Courses,Course_Name,object,0,0.0,496,Applied Data Science Specialization | Ageing and The Brain: The Impact of Neurodegenerative Diseases | Contemporary Chinese I:  1.2,inspect
+Courses,Platform,object,0,0.0,4,Coursera | Future Learn | Future Learn,inspect
+Courses,Category,object,236,47.2,12,Data Science | Business | Data Science,inspect
+Courses,Skills,object,296,59.2,201,"Data Science, Python Programming, Data Analysis, Pandas, Numpy, Jupyter notebooks, Predictive Modelling, Data Visualization (DataViz), Model Selection, Dashboards and Charts, dash, Matplotlib,  | Marketing,Social Media Marketing,Marketing Mix,Public Relations,Promotional Mix, | Team Building,Data Science,Management,Team Management,",inspect
+Courses,Role,object,0,0.0,11,Data Scientist | ML Engineer | General Technology,inspect
+Courses,Difficulty,object,482,96.4,2,Intermediate | Intermediate | Intermediate,inspect
+Courses,Duration,object,18,3.6,79,Approximately 6 months to complete | 5 weeks | 4 weeks,inspect
+Courses,Rating,object,243,48.6,17,4.6stars | 4.8stars | 4.5stars,inspect
+Courses,Certificate_Available,object,0,0.0,2,Available/Check Course | Unknown | Unknown,inspect
+Courses,Description,object,3,0.6,488,"Get hands-on skills for a career in data science. Learn Python, analyze and visualize data. Apply your skills to data science and machine learning.  | Learn what happens to the brain as neurodegenerative diseases progress and study the latest research on brain disorder prevention. | Build your Chinese language skills and improve your fluency in speaking and writing Chinese Mandarin.",inspect
+Courses,URL,object,0,0.0,500,https://www.coursera.org/specializations/applied-data-science | https://www.futurelearn.com/courses/brain-ageing | https://www.futurelearn.com/courses/contemporary-chinese-i-1-2,inspect
+Courses,Student_ID,object,0,0.0,500,S0001 | S0002 | S0003,inspect
+Internships,Internship_ID,object,0,0.0,500,I0001 | I0002 | I0003,inspect
+Internships,Student_ID,object,0,0.0,500,S0001 | S0002 | S0003,inspect
+Internships,Company,object,0,0.0,10,Oracle | Infosys | Oracle,inspect
+Internships,Role,object,0,0.0,8,Frontend Intern | ML Intern | Frontend Intern,inspect
+Internships,Duration,object,0,0.0,4,3 Months | 6 Months | 2 Months,inspect
+Internships,Status,object,0,0.0,3,Ongoing | Not Started | Not Started,inspect
+YouTube,Video_ID,object,0,0.0,500,V0001 | V0002 | V0003,inspect
+YouTube,Student_ID,object,0,0.0,500,S0001 | S0002 | S0003,inspect
+YouTube,Video_Title,object,0,0.0,498,Array Data Structure - Part1 | DSA Series by Shradha Khapra Ma&#39;am | C++ | Arrays in C Language complete Tutorial | Array in C Language by Rahul Sir | Introduction to Arrays and ArrayList in Java,inspect
+YouTube,Channel,object,0,0.0,273,Apna College | Programming GuruJi | Kunal Kushwaha,inspect
+YouTube,Category,object,0,0.0,8,DSA | DSA | DSA,inspect
+YouTube,Topic,object,0,0.0,59,Arrays | Arrays | Arrays,inspect
+YouTube,Skill,object,0,0.0,57,Arrays | Arrays | Arrays,inspect
+YouTube,Difficulty,object,0,0.0,1,Not Specified | Not Specified | Not Specified,inspect
+YouTube,Duration_Minutes,float64,500,100.0,0,,inspect
+YouTube,Description,object,13,2.6,454,"New DSA Sheet : https://bit.ly/dsa-sheet-apnacollege Share your DSA progress on LinkedIn : https://bit.ly/Ln-ac { #50Day DSA ... | Arrays in C Language complete Tutorial | Array in C Language by Rahul Sir #array #arrayinc #arraysinc Welcome to our channel, ... | In this video we cover Arrays and ArrayList in Java from scratch. We dive deep into how it works, the memory management, ...",inspect
+YouTube,URL,object,0,0.0,500,https://www.youtube.com/watch?v=8wmn7k1TTcI | https://www.youtube.com/watch?v=h7tQ4u56njY | https://www.youtube.com/watch?v=n60Dn0UsbEk,inspect
+Projects,Project_ID,object,0,0.0,500,P0001 | P0002 | P0003,inspect
+Projects,Student_ID,object,0,0.0,500,S0001 | S0002 | S0003,inspect
+Projects,Project_Name,object,0,0.0,15,Portfolio Website | Portfolio Website | E-Commerce Website,inspect
+Projects,Technology,object,0,0.0,10,Flask | Node.js | C++,inspect
+Projects,Difficulty,object,0,0.0,3,Hard | Medium | Hard,inspect
+Projects,GitHub_Link,object,0,0.0,500,https://github.com/ST0001/project | https://github.com/ST0002/project | https://github.com/ST0003/project,inspect
+AICTE_Internships,AICTE_Internship_ID,object,0,0.0,500,AICTE0001 | AICTE0002 | AICTE0003,inspect
+AICTE_Internships,Unnamed: 0,int64,0,0.0,500,43 | 950 | 44,inspect
+AICTE_Internships,Job Title,object,0,0.0,272,DAY-NULM WEBSITE DESIGN WITH INTERACTIVE DASHBOARD & MOBILE APPLICATION DEVELOPMENT | DAY-NULM WEBSITE DESIGN WITH INTERACTIVE DASHBOARD & MOBILE APPLICATION DEVELOPMENT | DAYNULM- MOBILE APPLICATION ANDROID DEVELOPER,inspect
+AICTE_Internships,Job Type,object,0,0.0,3,Full Time | Part Time | Part Time,inspect
+AICTE_Internships,Company Name,object,0,0.0,355,DAY NULM | TOWN MUNICIPAL COUNCIL BHALKI | DAY NULM,inspect
+AICTE_Internships,Posted Date,object,0,0.0,204,24-03-2023 | 23-09-2024 | 24-03-2023,inspect
+AICTE_Internships,Cities,object,0,0.0,277,New Delhi | Bhalki | New Delhi,inspect
+AICTE_Internships,States,object,0,0.0,21,Delhi | Karnataka | Delhi,inspect
+AICTE_Internships,Stipend,object,0,0.0,26,Unpaid | 1600 /month | Unpaid,inspect
+AICTE_Internships,Start Date,object,0,0.0,1,Immediately | Immediately | Immediately,inspect
+AICTE_Internships,Duration,object,0,0.0,25,2 Months | 3 Months | 2 Months,inspect
+AICTE_Internships,Numer of Openings,int64,0,0.0,37,60 | 5 | 50,inspect
+AICTE_Internships,Late date to apply,object,0,0.0,229,17-07-2023 | 23-09-2024 | 10-04-2023,inspect
+AICTE_Internships,search_text,object,0,0.0,498,day-nulm website design with interactive dashboard & mobile application development full time day nulm | day-nulm website design with interactive dashboard & mobile application development part time town municipal council bhalki | daynulm- mobile application android developer part time day nulm,inspect
+AICTE_Internships,Relevance_Score,int64,0,0.0,5,4 | 4 | 3,inspect
+AICTE_Internships,Broader_Score,int64,0,0.0,6,6 | 6 | 4,inspect
+Internshala_Internships,Internshala_Internship_ID,object,0,0.0,500,INT0001 | INT0002 | INT0003,inspect
+Internshala_Internships,internship_title,object,0,0.0,233,Web Development - Full Stack Developer | Software Development (JavaScript/Node.js) | Software Development & Testing (QA),inspect
+Internshala_Internships,company_name,object,0,0.0,434,Truly IAS | Abhith Tecnologies OPC Private Limited | CrescoWorks,inspect
+Internshala_Internships,location,object,0,0.0,47,Work From Home | Navi Mumbai | Coimbatore,inspect
+Internshala_Internships,start_date,object,0,0.0,2,Immediately | Immediately | Immediately,inspect
+Internshala_Internships,duration,object,0,0.0,8,6 Months | 6 Months | 6 Months,inspect
+Internshala_Internships,stipend,object,0,0.0,111,"₹ 5,000 /month | ₹ 3,000 /month | ₹ 3,000 /month",inspect

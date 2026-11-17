@@ -56,7 +56,7 @@ interface UserContextValue {
   login: (user: AuthUser) => void
   logout: () => void
   saveProfile: (data: UserProfile) => void
-  refreshProfile: () => Promise<boolean>
+  refreshProfile: (user?: AuthUser) => Promise<boolean>
 }
 
 const defaultProfile: UserProfile = {
@@ -142,21 +142,21 @@ export function UserProvider({
 
 
   // Fetch the current user's profile from the backend.
-  const refreshProfile = async (): Promise<boolean> => {
-
+  const refreshProfile = async (
+    user?: AuthUser
+  ): Promise<boolean> => {
     try {
+      const currentUser = user || authUser
 
-      const data = await apiRequest(
-        '/profile'
-      ) as BackendProfile
-
-      if (!authUser) {
+      if (!currentUser) {
         return false
       }
 
+      const data = await apiRequest('/profile') as BackendProfile
+
       const loadedProfile = mapBackendProfile(
         data,
-        authUser
+        currentUser
       )
 
       setProfile(loadedProfile)
@@ -177,16 +177,16 @@ export function UserProvider({
       return true
 
     } catch (error) {
-
       if (
         error instanceof Error &&
         error.message.includes('Profile not found')
       ) {
+        const currentUser = user || authUser
 
         setProfile({
           ...defaultProfile,
-          name: authUser?.name || '',
-          email: authUser?.email || '',
+          name: currentUser?.name || '',
+          email: currentUser?.email || '',
         })
 
         setIsProfileComplete(false)
@@ -197,7 +197,6 @@ export function UserProvider({
       throw error
     }
   }
-
 
   // Restore authentication and profile after a browser refresh.
   useEffect(() => {

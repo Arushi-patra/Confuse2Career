@@ -1,17 +1,3 @@
-# # core/config.py
-# from pydantic_settings import BaseSettings
-
-# class Settings(BaseSettings):
-#     DATABASE_URL: str
-#     JWT_SECRET: str
-#     JWT_ALGORITHM: str = "HS256"
-
-#     class Config:
-#         env_file = ".env"
-
-# settings = Settings()
-# core/config.py
-
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -29,6 +15,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env"
     )
+    ML_SERVICE_URL: str = "http://127.0.0.1:8002"
 
 
 settings = Settings()

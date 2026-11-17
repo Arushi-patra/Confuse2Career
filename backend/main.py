@@ -12,6 +12,7 @@ from core.database import Base, engine
 # from routers import auth, profile, dashboard, roadmap, resume
 from routers import (auth, recommendations, resume, roadmap, skills, progress, profile)
 from routers.auth import router as auth_router
+from routers import ml
 
 # Create all tables (only for dev — use Alembic migrations for production changes)
 Base.metadata.create_all(bind=engine)
@@ -40,7 +41,11 @@ app.include_router(resume.router, prefix="/resume", tags=["Resume"])
 app.include_router(recommendations.router, prefix="/recommendations", tags=["Recommendations"])
 app.include_router(skills.router, prefix="/skills", tags=["Skills"])
 app.include_router(progress.router, prefix="/progress", tags=["Progress"])
-
+app.include_router(
+    ml.router,
+    prefix="/ml",
+    tags=["Machine Learning"]
+)
 
 @app.get("/")
 def root():

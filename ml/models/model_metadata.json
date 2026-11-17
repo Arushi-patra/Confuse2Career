@@ -1,0 +1,85 @@
+{
+  "model_name": "ExtraTrees",
+  "training_rows": 1500,
+  "heldout_test_rows": 300,
+  "features_used": [
+    "College",
+    "Branch",
+    "Year",
+    "Study_Hours",
+    "Dream_Company",
+    "Target_Role",
+    "Easy_Solved",
+    "Medium_Solved",
+    "Hard_Solved",
+    "Contest_Rating",
+    "Platform_x",
+    "DBMS",
+    "Operating_System",
+    "Computer_Networks",
+    "OOP",
+    "SQL",
+    "Technology",
+    "Difficulty",
+    "Platform_y",
+    "Company",
+    "Role",
+    "Duration",
+    "days_until_placement_from_reference_date",
+    "weeks_until_placement",
+    "months_until_placement",
+    "total_coding_solved",
+    "weighted_coding_score",
+    "coding_volume",
+    "hard_problem_ratio",
+    "medium_problem_ratio",
+    "weekly_study_hours",
+    "core_cs_average",
+    "project_difficulty_score",
+    "internship_duration_months"
+  ],
+  "target": "Overall_Status",
+  "cv_results": [
+    {
+      "model": "Dummy",
+      "accuracy": 0.42749999999999994,
+      "macro_precision": 0.10687499999999998,
+      "macro_recall": 0.25,
+      "macro_f1": 0.14973658636386883,
+      "weighted_f1": 0.25605365454452456
+    },
+    {
+      "model": "LogisticRegression",
+      "accuracy": 0.8941666666666667,
+      "macro_precision": 0.8759208048927499,
+      "macro_recall": 0.8853108221946726,
+      "macro_f1": 0.879511460561026,
+      "weighted_f1": 0.8957205528995807
+    },
+    {
+      "model": "RandomForest",
+      "accuracy": 0.9666666666666666,
+      "macro_precision": 0.9595443327130267,
+      "macro_recall": 0.9684383878040783,
+      "macro_f1": 0.9634113518551365,
+      "weighted_f1": 0.9668676167756229
+    },
+    {
+      "model": "ExtraTrees",
+      "accuracy": 0.9691666666666666,
+      "macro_precision": 0.9617240790458185,
+      "macro_recall": 0.9673950257168297,
+      "macro_f1": 0.9640453385063168,
+      "weighted_f1": 0.9692858647056749
+    },
+    {
+      "model": "HistGradientBoosting",
+      "accuracy": 0.9683333333333334,
+      "macro_precision": 0.9644906451591577,
+      "macro_recall": 0.9645978691183412,
+      "macro_f1": 0.9638972731225921,
+      "weighted_f1": 0.9681506640800727
+    }
+  ],
+  "random_state": 42
+}

@@ -1,0 +1,30 @@
+{
+  "Master_Students": {
+    "rows": 1500,
+    "columns": 40
+  },
+  "Courses": {
+    "rows": 500,
+    "columns": 13
+  },
+  "Internships": {
+    "rows": 500,
+    "columns": 6
+  },
+  "YouTube": {
+    "rows": 500,
+    "columns": 11
+  },
+  "Projects": {
+    "rows": 500,
+    "columns": 6
+  },
+  "AICTE_Internships": {
+    "rows": 500,
+    "columns": 16
+  },
+  "Internshala_Internships": {
+    "rows": 500,
+    "columns": 7
+  }
+}

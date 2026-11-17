@@ -3,11 +3,11 @@ import { useNavigate, Link } from 'react-router'
 import { useUser } from '../context/UserContext'
 import { useDarkMode } from '../hooks/useDarkMode'
 import logoSvg from '../imports/logo.png'
-import { apiRequest } from "../api/api"
+import { apiRequest, ApiError } from "../api/api"
 
 export default function Login() {
   const navigate = useNavigate()
-  const { login } = useUser()
+  const { login, refreshProfile } = useUser()
   const [dark, toggleDark] = useDarkMode()
 
   const [email, setEmail] = useState('')
@@ -25,15 +25,6 @@ export default function Login() {
     return e
   }
 
-  // const handleLogin = () => {
-  //   const e = validate()
-  //   if (Object.keys(e).length) { setErrors(e); return }
-  //   setLoading(true)
-  //   setTimeout(() => {
-  //     login(email)
-  //     navigate(isProfileComplete ? '/dashboard' : '/profile')
-  //   }, 1000)
-  // }
   const handleLogin = async () => {
     const e = validate()
 
@@ -43,19 +34,20 @@ export default function Login() {
     }
 
     setLoading(true)
+    setErrors({})
+
+    let loginSuccessful = false
 
     try {
+      // STEP 1: Authenticate user
       const formData = new URLSearchParams()
 
-      formData.append("username", email)
+      formData.append("username", email.trim().toLowerCase())
       formData.append("password", password)
 
       const response = await apiRequest("/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: formData.toString(),
+        body: formData,
       })
 
       localStorage.setItem(
@@ -63,64 +55,74 @@ export default function Login() {
         response.access_token
       )
 
-      if (response.refresh_token) {
-        localStorage.setItem(
-          "refresh_token",
-          response.refresh_token
+    if (response.refresh_token) {
+      localStorage.setItem(
+        "refresh_token",
+        response.refresh_token
         )
       }
 
-      // Fetch the authenticated user's details.
-      const user = await apiRequest('/auth/me') as {
+      loginSuccessful = true
+
+      // STEP 2: Fetch authenticated user
+      const user = await apiRequest("/auth/me") as {
         id: number
         name: string
         email: string
         role: string
       }
+
       login(user)
 
-      // Check whether the user has a saved profile.
-      let profileExists = false
+      // STEP 3: Fetch and load the saved profile
+      const profileFound = await refreshProfile(user)
 
+      if (!profileFound) {
+        navigate("/profile", { replace: true })
+        return
+      }
+
+      // STEP 4: Check whether roadmap exists
       try {
-        await apiRequest('/profile')
-        profileExists = true
+        await apiRequest("/roadmap")
+
+        // Existing roadmap found
+        navigate("/dashboard", { replace: true })
+
       } catch (error) {
-        if (
-          error instanceof Error &&
-          error.message.toLowerCase().includes('profile not found')
-        ) {
-          profileExists = false
+        if (error instanceof ApiError && error.status === 404) {
+
+          // Profile exists, but roadmap does not.
+          // Send user to onboarding.
+          navigate("/onboarding", { replace: true })
+
         } else {
           throw error
         }
       }
 
-      if (!profileExists) {
-        navigate('/profile', { replace: true })
-      } else {
-        try {
-          await apiRequest('/roadmap')
-          navigate('/dashboard', { replace: true })
-        } catch (error) {
-          if (
-            error instanceof Error &&
-            (error.message.includes('404') ||
-             error.message.toLowerCase().includes('not found'))
-          ) {
-            navigate('/onboarding', { replace: true })
-          } else {
-            throw error
-          }
-        }
-      }
-
     } catch (error) {
-      setErrors({
-        email: "Invalid email or password",
-      })
+      console.error("Login process error:", error)
 
-      console.error(error)
+      if (!loginSuccessful) {
+        if (error instanceof ApiError && error.status === 401) {
+          setErrors({
+            email: "Invalid email or password",
+          })
+        } else if (error instanceof ApiError) {
+          setErrors({
+            email: error.message,
+          })
+        } else {
+          setErrors({
+            email: "Unable to connect to the server. Please try again.",
+          })
+        }
+      } else {
+        setErrors({
+          email: "You are signed in, but something went wrong while loading your profile. Please try again.",
+        })
+      }
 
     } finally {
       setLoading(false)
@@ -296,12 +298,12 @@ export default function Login() {
           </Link>
         </p>
 
-        <div style={{ marginTop: 24, textAlign: 'center', fontSize: 14, color: 'var(--muted-foreground)' }}>
+        {/* <div style={{ marginTop: 24, textAlign: 'center', fontSize: 14, color: 'var(--muted-foreground)' }}>
           Don&apos;t have an account?{' '}
           <span style={{ color: 'var(--primary)', fontWeight: 600, cursor: 'pointer' }} onClick={() => navigate('/profile')}>
             Create Profile →
           </span>
-        </div>
+        </div> */}
       </div>
 
        <footer

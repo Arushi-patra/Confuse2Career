@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
 
+import httpx
+
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -7,10 +9,12 @@ from core.deps import get_current_user
 
 from models.user import User
 from models.skill import SkillAnalysis
+from models.user_profile import UserProfile
 
 from schemas.skills import (
     SkillAnalysisRequest,
-    SkillAnalysisResponse
+    SkillAnalysisResponse,
+    SkillGapAnalysisRequest
 )
 
 from services.skills import (
@@ -21,6 +25,12 @@ from services.skills import (
 
 router = APIRouter()
 
+ML_SERVICE_URL = "http://127.0.0.1:8002"
+
+
+# -----------------------------------------
+# EXISTING: Overall career readiness
+# -----------------------------------------
 
 @router.post(
     "/analyze",
@@ -28,14 +38,9 @@ router = APIRouter()
 )
 def analyze_skills(
     request: SkillAnalysisRequest,
-
-    current_user: User = Depends(
-        get_current_user
-    ),
-
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Calculate the overall readiness score.
     readiness = calculate_readiness(
         request.dsa,
         request.development,
@@ -46,7 +51,6 @@ def analyze_skills(
 
     level = get_level(readiness)
 
-    # Find the user's latest saved analysis.
     analysis = (
         db.query(SkillAnalysis)
         .filter(
@@ -55,7 +59,6 @@ def analyze_skills(
         .first()
     )
 
-    # Update existing analysis.
     if analysis:
         analysis.dsa = request.dsa
         analysis.development = request.development
@@ -65,7 +68,6 @@ def analyze_skills(
         analysis.career_readiness_score = readiness
         analysis.level = level
 
-    # Create a new analysis for this user.
     else:
         analysis = SkillAnalysis(
             user_id=current_user.id,
@@ -86,15 +88,16 @@ def analyze_skills(
     return analysis
 
 
+# -----------------------------------------
+# EXISTING: Get latest career readiness
+# -----------------------------------------
+
 @router.get(
     "/latest",
     response_model=SkillAnalysisResponse
 )
 def get_latest_skill_analysis(
-    current_user: User = Depends(
-        get_current_user
-    ),
- 
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     analysis = (
@@ -120,65 +123,75 @@ def get_latest_skill_analysis(
         "aptitude": analysis.aptitude,
         "resume": analysis.resume,
         "interview": analysis.interview,
-        "career_readiness_score":
-            analysis.career_readiness_score,
+        "career_readiness_score": analysis.career_readiness_score,
         "level": analysis.level
     }
 
 
+# -----------------------------------------
+# NEW: ML-based technical skill-gap analysis
+# -----------------------------------------
 
+@router.post("/gaps")
+def analyze_skill_gaps(
+    request: SkillGapAnalysisRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Get the student's saved profile.
+    profile = (
+        db.query(UserProfile)
+        .filter(
+            UserProfile.user_id == current_user.id
+        )
+        .first()
+    )
 
-# from fastapi import APIRouter, Depends
+    if not profile:
+        raise HTTPException(
+            status_code=404,
+            detail="Profile not found. Please complete your profile first."
+        )
 
-# from core.deps import get_current_user
+    if not profile.dream_company or not profile.target_role:
+        raise HTTPException(
+            status_code=400,
+            detail="Please update your dream company and target role in your profile."
+        )
 
-# from models.user import User
+    # Prepare the request for the ML service.
+    ml_payload = {
+        "dream_company": profile.dream_company,
+        "dream_role": profile.target_role,
+        "skills": request.skills
+    }
 
-# from schemas.skills import (
-#     SkillAnalysisRequest,
-#     SkillAnalysisResponse
-# )
+    # Call the separate ML service.
+    try:
+        response = httpx.post(
+            f"{ML_SERVICE_URL}/skill-gaps",
+            json=ml_payload,
+            timeout=30.0
+        )
 
-# from services.skills import (
-#     calculate_readiness,
-#     get_level
-# )
+        response.raise_for_status()
 
+        return response.json()
 
-# router = APIRouter()
+    except httpx.TimeoutException:
+        raise HTTPException(
+            status_code=504,
+            detail="ML service request timed out."
+        )
 
+    except httpx.RequestError:
+        raise HTTPException(
+            status_code=503,
+            detail="Unable to connect to the ML service. Please check whether it is running."
+        )
 
-# @router.post(
-#     "/analyze",
-#     response_model=SkillAnalysisResponse
-# )
-# def analyze_skills(
-
-#     request: SkillAnalysisRequest,
-
-#     current_user: User = Depends(
-#         get_current_user
-#     )
-# ):
-
-#     readiness = calculate_readiness(
-#         request.dsa,
-#         request.development,
-#         request.aptitude,
-#         request.resume,
-#         request.interview
-#     )
-
-#     level = get_level(
-#         readiness
-#     )
-
-#     return {
-#         "dsa": request.dsa,
-#         "development": request.development,
-#         "aptitude": request.aptitude,
-#         "resume": request.resume,
-#         "interview": request.interview,
-#         "career_readiness_score": readiness,
-#         "level": level
-#     }
+    except httpx.HTTPStatusError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=f"ML service returned an error: {exc.response.text}"
+        )

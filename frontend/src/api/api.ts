@@ -1,7 +1,16 @@
-
-// const API_BASE_URL = "http://127.0.0.1:8001"
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8001"
+
+// Custom error class that preserves HTTP status codes
+export class ApiError extends Error {
+  status: number
+
+  constructor(message: string, status: number) {
+    super(message)
+    this.name = "ApiError"
+    this.status = status
+  }
+}
 
 export async function apiRequest(
   endpoint: string,
@@ -10,8 +19,7 @@ export async function apiRequest(
   const token = localStorage.getItem("access_token")
   const headers = new Headers(options.headers)
 
-  // Preserve an explicitly supplied Content-Type.
-  // FormData needs its boundary to be set automatically by fetch.
+  // Handle request content types
   if (options.body instanceof FormData) {
     headers.delete("Content-Type")
   } else if (options.body instanceof URLSearchParams) {
@@ -23,6 +31,7 @@ export async function apiRequest(
     headers.set("Content-Type", "application/json")
   }
 
+  // Attach authentication token
   if (token) {
     headers.set("Authorization", `Bearer ${token}`)
   }
@@ -32,6 +41,7 @@ export async function apiRequest(
     headers,
   })
 
+  // Handle API errors
   if (!response.ok) {
     let errorMessage = `Request failed: ${response.status}`
 
@@ -42,18 +52,20 @@ export async function apiRequest(
       if (typeof detail === "string") {
         errorMessage = detail
       } else if (Array.isArray(detail)) {
-        errorMessage = detail
-          .map((item: { msg?: string }) => item.msg ?? "")
-          .filter(Boolean)
-          .join(", ") || errorMessage
+        errorMessage =
+          detail
+            .map((item: { msg?: string }) => item.msg ?? "")
+            .filter(Boolean)
+            .join(", ") || errorMessage
       }
     } catch {
-      // Keep the default error message if the response isn't JSON.
+      // Keep default error message
     }
 
-    throw new Error(errorMessage)
+    throw new ApiError(errorMessage, response.status)
   }
 
+  // Return JSON responses
   const contentType = response.headers.get("content-type")
 
   if (contentType?.includes("application/json")) {
@@ -62,9 +74,6 @@ export async function apiRequest(
 
   return response
 }
-
-
-
 
 // const API_BASE_URL = "http://127.0.0.1:8001"
 
